@@ -1,0 +1,10 @@
+broken_glass_percent,cumulative_probability
+0,0.0
+2,0.25
+4,0.55
+6,0.75
+8,0.88
+10,0.95
+15,0.99
+20,1.0
+100,1.0

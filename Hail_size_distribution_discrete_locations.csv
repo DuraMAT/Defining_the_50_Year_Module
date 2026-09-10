@@ -1,0 +1,25 @@
+﻿Location,Distribution,Parameter,Estimate,Std Error
+Denver,Gamma,Shape,6.914079678,0.297754642
+Denver,Gamma,Scale,0.180991506,0.008084362
+Denver,Largest Extreme Value,Location,1.028000949,0.011453138
+Denver,Largest Extreme Value,Scale,0.351353143,0.009190687
+Austin,Gamma,Shape,5.49821633,0.346486252
+Austin,Gamma,Scale,0.24958507,0.016469112
+Austin,Largest Extreme Value,Location,1.096669437,0.020674693
+Austin,Largest Extreme Value,Scale,0.430997966,0.016726874
+Phoenix,Gamma,Shape,7.93364676,1.067641438
+Phoenix,Gamma,Scale,0.133251434,0.018511187
+Phoenix,Largest Extreme Value,Location,0.885264204,0.028369682
+Phoenix,Largest Extreme Value,Scale,0.279556994,0.021344148
+Dallas,Largest Extreme Value,Location,1.104599113,0.012678807
+Dallas,Largest Extreme Value,Scale,0.457996445,0.010377973
+Dallas,Gamma,Shape,4.913685671,0.178436524
+Dallas,Gamma,Scale,0.285455576,0.010914482
+Los Angeles,Largest Extreme Value,Location,0.85947532,0.057264814
+Los Angeles,Largest Extreme Value,Scale,0.298047287,0.04339198
+Los Angeles,Gamma,Shape,7.753006832,1.960255516
+Los Angeles,Gamma,Scale,0.133496586,0.034869578
+"Lubbock, TX",Largest Extreme Value,Location,1.293954397,0.030952639
+"Lubbock, TX",Largest Extreme Value,Scale,0.530469276,0.023774249
+"Lubbock, TX",Gamma,Shape,5.567123971,0.424934758
+"Lubbock, TX",Gamma,Scale,0.28978539,0.023147594
