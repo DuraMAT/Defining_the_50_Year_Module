@@ -1,0 +1,13 @@
+# Jupyter automatic Python exports
+exports/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
