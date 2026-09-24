@@ -207,7 +207,6 @@ def hail_event(location, hail_return, hail_coverage, rng=None):
     return np.random.rand() < p_site_hit
 
 
-
 # Sample Hail-
 def sample_hail(location, hail_dist, rng=None):
     if rng is None:
@@ -217,11 +216,9 @@ def sample_hail(location, hail_dist, rng=None):
     return np.random.gamma(shape=shape, scale=scale)
 
 
-
 # -----------------------------
 # Damage
 # -----------------------------
-
 
 
 def hail_bin_label(hail_size_in):
@@ -236,6 +233,7 @@ def hail_bin_label(hail_size_in):
     else:
         return "4_5"
 
+
 def sample_from_empirical_cdf_arrays(x_vals, cdf_vals, rng=None):
     """
     Inverse-CDF sampler from an empirical CDF.
@@ -245,7 +243,6 @@ def sample_from_empirical_cdf_arrays(x_vals, cdf_vals, rng=None):
         rng = np.random.default_rng()
     u = rng.uniform()
     return np.interp(u, cdf_vals, x_vals)
-
 
 
 def sample_from_empirical_cdf(cdf_df, x_col, p_col, rng=None):
@@ -305,21 +302,10 @@ def sample_plr_increase(plr_cdf, rng=None):
 
 
 def simulate_project(
-    P0_MW,
-    location,
-    years,
-    damage_cdfs,
-    hail_return,
-    hail_dist,
-    hail_coverage,
-    plr_cdf=None,
-    t50=39,
-    t90=42,
-    seed=0,
-    use_post_hail_plr=True,
-    track_hail_buckets=True,
-    apply_plr_once=True,
-    debug = False,
+    P0_MW, location, years, damage_cdfs, hail_return, hail_dist,
+    hail_coverage, plr_cdf=None, t50=39, t90=42, seed=0,
+    use_post_hail_plr=True, track_hail_buckets=True,
+    apply_plr_once=True, debug=False,
 ):
     """
     Simulate project capacity loss from intrinsic reliability failures
@@ -347,7 +333,7 @@ def simulate_project(
             Apply post-hail PLR globally to all surviving project capacity.
 
     apply_plr_once : bool
-        If True: 
+        If True:
             A PLR penalty is assigned only once.
 
         If False:
@@ -357,9 +343,7 @@ def simulate_project(
     rng = np.random.default_rng(seed)
 
     alpha, beta = weibull_params_from_t50_t90(t50, t90)
-    S_rel_only, f_rel = weibull_annual_failure_fraction(
-        years, alpha, beta
-    )
+    S_rel_only, f_rel = weibull_annual_failure_fraction(years, alpha, beta)
 
     # ------------------------------------------------------------------
     # Capacity buckets
@@ -389,16 +373,10 @@ def simulate_project(
         # Initial year
         # --------------------------------------------------------------
 
-
         # Start-of-year physical capacity
-
-        available_start = (
-            undamaged_MW
-            + hail_damaged_MW
-        )
+        available_start = undamaged_MW + hail_damaged_MW
 
         if i == 0:
-
             rows.append({
                 "year": year,
                 "hail_event": False,
@@ -422,7 +400,6 @@ def simulate_project(
                 "S_total": 1.0,
                 "available_capacity_MW_start": P0_MW,
             })
-
             continue
 
         # --------------------------------------------------------------
@@ -435,17 +412,13 @@ def simulate_project(
 
                 # Only previously hail-damaged survivors receive
                 # the post-hail degradation penalty.
-                hail_damaged_perf_factor *= (
-                    1.0 - extra_plr_per_year
-                )
+                hail_damaged_perf_factor *= 1.0 - extra_plr_per_year
 
             else:
 
                 # Global PLR mode:
                 # degradation applies to all surviving project capacity.
-                global_performance_factor *= (
-                    1.0 - extra_plr_per_year
-                )
+                global_performance_factor *= 1.0 - extra_plr_per_year
 
         # --------------------------------------------------------------
         # 1. Intrinsic Weibull reliability failures
@@ -453,11 +426,7 @@ def simulate_project(
 
         rel_fail_undamaged = undamaged_MW * f_rel[i]
         rel_fail_damaged = hail_damaged_MW * f_rel[i]
-
-        rel_fail_MW = (
-            rel_fail_undamaged
-            + rel_fail_damaged
-        )
+        rel_fail_MW = rel_fail_undamaged + rel_fail_damaged
 
         undamaged_MW -= rel_fail_undamaged
         hail_damaged_MW -= rel_fail_damaged
@@ -479,55 +448,31 @@ def simulate_project(
             hail_size = sample_hail(location, hail_dist, rng=rng)
 
             f_cat = sample_broken_glass_fraction(
-                hail_size,
-                damage_cdfs,
-                rng=rng,
+                hail_size, damage_cdfs, rng=rng
             )
 
             # Broken-glass failures affect all physically surviving MW
-            hail_fail_undamaged = (
-                undamaged_MW * f_cat
-            )
+            hail_fail_undamaged = undamaged_MW * f_cat
+            hail_fail_damaged = hail_damaged_MW * f_cat
+            hail_fail_MW = hail_fail_undamaged + hail_fail_damaged
 
-            hail_fail_damaged = (
-                hail_damaged_MW * f_cat
-            )
-
-            hail_fail_MW = (
-                hail_fail_undamaged
-                + hail_fail_damaged
-            )
-
-            undamaged_survivors_after_hail = (
-                undamaged_MW
-                - hail_fail_undamaged
-            )
-
-            damaged_survivors_after_hail = (
-                hail_damaged_MW
-                - hail_fail_damaged
-            )
+            undamaged_survivors_after_hail = undamaged_MW - hail_fail_undamaged
+            damaged_survivors_after_hail = hail_damaged_MW - hail_fail_damaged
 
             # ----------------------------------------------------------
             # 3. Post-hail PLR
             # ----------------------------------------------------------
 
-            if (
-                use_post_hail_plr
-                and plr_cdf is not None
-            ):
- 
-                sampled_plr = sample_plr_increase(
-                    plr_cdf,
-                    rng=rng,
-                )
+            if use_post_hail_plr and plr_cdf is not None:
+
+                sampled_plr = sample_plr_increase(plr_cdf, rng=rng)
 
                 if debug:
                     print("PLR branch entered at year", year)
                     print("use_post_hail_plr =", use_post_hail_plr)
                     print("plr_cdf is None =", plr_cdf is None)
                     print("sampled_plr =", sampled_plr)
-                    
+
                 # ------------------------------------------------------
                 # A. TRACK HAIL-DAMAGED CAPACITY SEPARATELY
                 # ------------------------------------------------------
@@ -536,15 +481,11 @@ def simulate_project(
 
                     # Capacity experiencing hail and surviving it
                     # becomes hail-damaged capacity.
-                    newly_damaged_MW = (
-                        undamaged_survivors_after_hail
-                    )
+                    newly_damaged_MW = undamaged_survivors_after_hail
 
                     undamaged_MW = 0.0
-
                     hail_damaged_MW = (
-                        damaged_survivors_after_hail
-                        + newly_damaged_MW
+                        damaged_survivors_after_hail + newly_damaged_MW
                     )
 
                     if apply_plr_once:
@@ -552,15 +493,9 @@ def simulate_project(
                         # Add a PLR penalty only if one has not
                         # previously been assigned.
                         if extra_plr_per_year == 0.0:
-
                             plr_added = sampled_plr
-
-                            extra_plr_per_year = (
-                                sampled_plr
-                            )
-
+                            extra_plr_per_year = sampled_plr
                         else:
-
                             plr_added = 0.0
 
                     else:
@@ -568,10 +503,7 @@ def simulate_project(
                         # Allow penalties from multiple hail events
                         # to accumulate.
                         plr_added = sampled_plr
-
-                        extra_plr_per_year += (
-                            sampled_plr
-                        )
+                        extra_plr_per_year += sampled_plr
 
                 # ------------------------------------------------------
                 # B. GLOBAL POST-HAIL PLR
@@ -589,26 +521,14 @@ def simulate_project(
                     hail_damaged_MW = 0.0
 
                     if apply_plr_once:
-
                         if extra_plr_per_year == 0.0:
-
                             plr_added = sampled_plr
-
-                            extra_plr_per_year = (
-                                sampled_plr
-                            )
-
+                            extra_plr_per_year = sampled_plr
                         else:
-
                             plr_added = 0.0
-
                     else:
-
                         plr_added = sampled_plr
-
-                        extra_plr_per_year += (
-                            sampled_plr
-                        )
+                        extra_plr_per_year += sampled_plr
 
             # ----------------------------------------------------------
             # No post-hail PLR
@@ -627,15 +547,8 @@ def simulate_project(
         # End-of-year capacities
         # --------------------------------------------------------------
 
-        total_fail_MW = (
-            rel_fail_MW
-            + hail_fail_MW
-        )
-
-        available_end = (
-            undamaged_MW
-            + hail_damaged_MW
-        )
+        total_fail_MW = rel_fail_MW + hail_fail_MW
+        available_end = undamaged_MW + hail_damaged_MW
 
         # --------------------------------------------------------------
         # Effective capacity
@@ -644,9 +557,7 @@ def simulate_project(
         if not use_post_hail_plr:
 
             # Physical surviving capacity only
-            effective_capacity_MW = (
-                available_end
-            )
+            effective_capacity_MW = available_end
 
         elif track_hail_buckets:
 
@@ -654,24 +565,19 @@ def simulate_project(
             # Hail-damaged MW receive the post-hail penalty.
             effective_capacity_MW = (
                 undamaged_MW
-                + hail_damaged_MW
-                * hail_damaged_perf_factor
+                + hail_damaged_MW * hail_damaged_perf_factor
             )
 
         else:
 
             # Post-hail degradation applies globally.
-            effective_capacity_MW = (
-                available_end
-                * global_performance_factor
-            )
+            effective_capacity_MW = available_end * global_performance_factor
 
         # --------------------------------------------------------------
         # Save results
         # --------------------------------------------------------------
 
         rows.append({
-
             "year": year,
 
             "hail_event": hail_bool,
@@ -681,57 +587,29 @@ def simulate_project(
             "f_cat": f_cat,
 
             "plr_added_this_year": plr_added,
+            "cumulative_extra_plr_per_year": extra_plr_per_year,
 
-            "cumulative_extra_plr_per_year":
-                extra_plr_per_year,
+            "undamaged_MW_end": undamaged_MW,
+            "hail_damaged_MW_end": hail_damaged_MW,
 
-            "undamaged_MW_end":
-                undamaged_MW,
+            "available_capacity_MW_end": available_end,
+            "effective_capacity_MW_end": effective_capacity_MW,
 
-            "hail_damaged_MW_end":
-                hail_damaged_MW,
+            "reliability_failures_MW": rel_fail_MW,
+            "hail_failures_MW": hail_fail_MW,
+            "total_failures_MW": total_fail_MW,
 
-            "available_capacity_MW_end":
-                available_end,
-
-            "effective_capacity_MW_end":
-                effective_capacity_MW,
-
-            "reliability_failures_MW":
-                rel_fail_MW,
-
-            "hail_failures_MW":
-                hail_fail_MW,
-
-            "total_failures_MW":
-                total_fail_MW,
-
-            "S_total":
-                available_end / P0_MW,
-                
+            "S_total": available_end / P0_MW,
             "available_capacity_MW_start": available_start,
-                
         })
 
     return pd.DataFrame(rows)
 
+
 def run_monte_carlo(
-    n_sims,
-    P0_MW,
-    location,
-    years,
-    damage_cdfs,
-    hail_return,
-    hail_dist,
-    hail_coverage,
-    plr_cdf=None,
-    t50=39,
-    t90=42,
-    base_seed=0,
-    use_post_hail_plr=True,
-    track_hail_buckets=True,
-    apply_plr_once=True,
-):
+    n_sims, P0_MW, location, years, damage_cdfs, hail_return, hail_dist,
+    hail_coverage, plr_cdf=None, t50=39, t90=42, base_seed=0,
+    use_post_hail_plr=True, track_hail_buckets=True, apply_plr_once=True,):
     sims = []
 
     for s in range(n_sims):
