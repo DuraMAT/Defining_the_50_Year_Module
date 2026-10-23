@@ -476,7 +476,7 @@ N_SIMS
 
 # ## Austin vs Phoenix at evaluation year
 
-evaluation_year = 30
+evaluation_year = 50
 
 austin_eval = mc_austin[
     mc_austin["year"] == evaluation_year
@@ -666,6 +666,8 @@ plt.ylabel(f"Effective capacity at year {evaluation_year} [MW]")
 plt.title(f"Monte Carlo capacity distribution at year {evaluation_year}")
 plt.grid(axis="y", alpha=0.3)
 plt.tight_layout()
+plt.savefig(FIG_DIR / "Fig08_austin_vs_phoenix_boxplot_50y.png", dpi=300, bbox_inches="tight")
+plt.savefig(FIG_DIR / "Fig08_austin_vs_phoenix_boxplot_50y.pdf", dpi=300, bbox_inches="tight")
 plt.show()
 
 
@@ -766,7 +768,7 @@ print("Saved Results/mc_by_area_50y.pkl")
 # In[35]:
 
 
-evaluation_year=30
+evaluation_year=50
 
 
 # In[36]:
@@ -796,6 +798,10 @@ plt.ylabel(f"Effective capacity at year {evaluation_year} [MW]")
 plt.title(f"Effect of module area on hail outcomes: Austin")
 plt.grid(axis="y", alpha=0.3)
 plt.tight_layout()
+
+plt.savefig(FIG_DIR / "Fig10_module_area_boxplot_50y.png", dpi=300, bbox_inches="tight")
+plt.savefig(FIG_DIR / "Fig10_module_area_boxplot_50y.pdf", dpi=300, bbox_inches="tight")
+
 plt.show()
 
 
@@ -835,7 +841,7 @@ area_summary
 
 # ## Summary by module-area case at evaluation year
 
-evaluation_year = 30
+evaluation_year = 50
 
 area_summary = []
 i=0
@@ -1319,9 +1325,6 @@ plt.show()
 
 
 # In[ ]:
-
-
-
 
 
 # In[ ]:
