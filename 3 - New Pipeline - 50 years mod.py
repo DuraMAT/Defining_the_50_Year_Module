@@ -97,8 +97,8 @@ years = np.arange(0, 51)
 
 location = "Austin"
 
-T50 = 39
-T90 = 42
+T50 = 55.89
+T90 = 60
 
 module_area_m2 = 2.0
 
@@ -159,8 +159,8 @@ simulation_settings = {
     "P0_MW": 100,
     "years": np.arange(0, 51),
     "location": "Austin",
-    "T50": 39,
-    "T90": 42,
+    "T50": 55.89,
+    "T90": 60,
     "module_area_m2": 2.0,
     "N_SIMS": 200,
     "BASE_SEED": 100,
@@ -172,7 +172,7 @@ simulation_settings = {
 
 import pickle
 
-with open("Results/simulation_settings.pkl", "wb") as f:
+with open("Results/simulation_settings_50y.pkl", "wb") as f:
     pickle.dump(simulation_settings, f)
 
 
@@ -336,8 +336,8 @@ mc_austin["location"] = "Austin"
 mc_austin["module_area_m2"] = module_area_m2
 mc_austin["module_area_case"] = "baseline"
 
-mc_austin.to_pickle("Results/mc_austin.pkl")
-print("Saved Results/mc_austin.pkl")
+mc_austin.to_pickle("Results/mc_austin_50y.pkl")
+print("Saved Results/mc_austin_50y.pkl")
 
 
 # In[17]:
@@ -424,8 +424,8 @@ plt.title(f"Monte Carlo capacity outcomes: {location}")
 plt.legend()
 plt.grid(alpha=0.3)
 plt.tight_layout()
-plt.savefig(FIG_DIR / "Fig05_austin_monte_carlo_capacity.png", dpi=300, bbox_inches="tight")
-plt.savefig(FIG_DIR / "Fig05_austin_monte_carlo_capacity.pdf", dpi=300, bbox_inches="tight")
+plt.savefig(FIG_DIR / "Fig05_austin_monte_carlo_capacity_50y.png", dpi=300, bbox_inches="tight")
+plt.savefig(FIG_DIR / "Fig05_austin_monte_carlo_capacity_50y.pdf", dpi=300, bbox_inches="tight")
 
 plt.show()
 
@@ -461,8 +461,8 @@ mc_phoenix["location"] = "Phoenix"
 mc_phoenix["module_area_m2"] = module_area_m2
 mc_phoenix["module_area_case"] = "baseline"
 
-mc_phoenix.to_pickle("Results/mc_phoenix.pkl")
-print("Saved Results/mc_phoenix.pkl")
+mc_phoenix.to_pickle("Results/mc_phoenix_50y.pkl")
+print("Saved Results/mc_phoenix_50y.pkl")
 
 
 # In[23]:
@@ -583,8 +583,8 @@ plt.title("Monte Carlo Effective Capacity: Phoenix vs. Austin")
 plt.legend(title="Location")
 plt.grid(alpha=0.3)
 plt.tight_layout()
-plt.savefig(FIG_DIR / "Fig06_austin_vs_phoenix_capacity.png", dpi=300, bbox_inches="tight")
-plt.savefig(FIG_DIR / "Fig06_austin_vs_phoenix_capacity.pdf", dpi=300, bbox_inches="tight")
+plt.savefig(FIG_DIR / "Fig06_austin_vs_phoenix_capacity_50y.png", dpi=300, bbox_inches="tight")
+plt.savefig(FIG_DIR / "Fig06_austin_vs_phoenix_capacity_50y.pdf", dpi=300, bbox_inches="tight")
 
 plt.show()
 
@@ -695,8 +695,8 @@ plt.ylabel("Probability density [log scale]")
 plt.title(f"Monte Carlo capacity distribution at year {evaluation_year}")
 plt.legend()
 plt.tight_layout()
-plt.savefig(FIG_DIR / "Fig07_year30_capacity_distribution_log.png", dpi=300, bbox_inches="tight")
-plt.savefig(FIG_DIR / "Fig07_year30_capacity_distribution_log.pdf", dpi=300, bbox_inches="tight")
+plt.savefig(FIG_DIR / "Fig07_year30_capacity_distribution_log_50y.png", dpi=300, bbox_inches="tight")
+plt.savefig(FIG_DIR / "Fig07_year30_capacity_distribution_log_50y.pdf", dpi=300, bbox_inches="tight")
 
 plt.show()
 
@@ -757,10 +757,10 @@ for label, module_area in module_cases.items():
 # SAVING DATA AS PICKLE
 import pickle
 
-with open("Results/mc_by_area.pkl", "wb") as f:
+with open("Results/mc_by_area_50y.pkl", "wb") as f:
     pickle.dump(mc_by_area, f)
 
-print("Saved Results/mc_by_area.pkl")
+print("Saved Results/mc_by_area_50y.pkl")
 
 
 # In[35]:
@@ -846,7 +846,7 @@ for label, mc in mc_by_area.items():
         mc["year"] == evaluation_year,
         "effective_capacity_MW_end"
     ]
-    mytitle="Year30_"+csvtitle[i]+".csv"
+    mytitle="Year30_"+csvtitle[i]+"_50y.csv"
     x.to_csv(mytitle)
     i+=1
     print(i)
@@ -1054,8 +1054,8 @@ ax.legend(
 )
 
 plt.tight_layout()
-plt.savefig(FIG_DIR / "Fig02b_cumulative_hail_probability_vs_exposure.png", dpi=300, bbox_inches="tight")
-plt.savefig(FIG_DIR / "Fig02b_cumulative_hail_probability_vs_exposure.pdf", dpi=300, bbox_inches="tight")
+plt.savefig(FIG_DIR / "Fig02b_cumulative_hail_probability_vs_exposure_50y.png", dpi=300, bbox_inches="tight")
+plt.savefig(FIG_DIR / "Fig02b_cumulative_hail_probability_vs_exposure_50y.pdf", dpi=300, bbox_inches="tight")
 
 
 plt.show()
@@ -1157,8 +1157,8 @@ ax2.legend(
     frameon=True
 )
 
-plt.savefig(FIG_DIR / "Fig03_hail_severity_and_geographic_extent.png", dpi=300, bbox_inches="tight")
-plt.savefig(FIG_DIR / "Fig03_hail_severity_and_geographic_extent.pdf", dpi=300, bbox_inches="tight")
+plt.savefig(FIG_DIR / "Fig03_hail_severity_and_geographic_extent_50y.png", dpi=300, bbox_inches="tight")
+plt.savefig(FIG_DIR / "Fig03_hail_severity_and_geographic_extent_50y.pdf", dpi=300, bbox_inches="tight")
 
 
 plt.show()
